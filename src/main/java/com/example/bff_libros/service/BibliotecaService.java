@@ -67,6 +67,25 @@ public class BibliotecaService {
         return extractList(response, "libros");
     }
 
+    public Map<String, Object> getLibroPorId(Long id) {
+        String query = """
+                query LibroPorId($id: Int!) {
+                    libro(id: $id) {
+                        idLibro titulo autor disponible
+                    }
+                }""";
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("id", id.intValue());
+        Map<String, Object> response = librosClient.graphql(buildQuery(query, variables));
+        return extractObject(response, "libro");
+    }
+
+    public List<Map<String, Object>> getLibrosDisponibles() {
+        String query = "{ librosDisponibles { idLibro titulo autor disponible } }";
+        Map<String, Object> response = librosClient.graphql(buildQuery(query));
+        return extractList(response, "librosDisponibles");
+    }
+
     public Map<String, Object> agregarLibro(String titulo, String autor) {
         String query = """
                 mutation AgregarLibro($titulo: String!, $autor: String) {

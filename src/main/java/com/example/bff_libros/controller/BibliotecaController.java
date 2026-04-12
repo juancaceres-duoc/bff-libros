@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bff_libros.service.BibliotecaService;
@@ -69,6 +68,16 @@ public class BibliotecaController {
     @GetMapping("/libros")
     public ResponseEntity<?> getLibros() {
         return ResponseEntity.ok(service.getLibros());
+    }
+
+    @GetMapping("/libros/disponibles")
+    public ResponseEntity<?> getLibrosDisponibles() {
+        return ResponseEntity.ok(service.getLibrosDisponibles());
+    }
+
+    @GetMapping("/libros/{id}")
+    public ResponseEntity<?> getLibroPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getLibroPorId(id));
     }
 
     @PostMapping("/libros")
