@@ -6,9 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "librosClient", url = "${azure.functions.libros-url}")
-public interface LibrosClient {
+@FeignClient(name = "reportesClient", url = "${azure.functions.reportes-url}")
+public interface ReportesClient {
 
-    @PostMapping("/libros/graphql")
+    @PostMapping("/reportes/graphql")
     Map<String, Object> graphql(@RequestBody Map<String, Object> body);
 }
