@@ -123,7 +123,10 @@ public class BibliotecaService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("id", id.intValue());
         Map<String, Object> response = librosClient.graphql(buildQuery(query, variables));
-        return extractObject(response, "eliminarLibro").toString();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> data = (Map<String, Object>) response.get("data");
+        Object result = data.get("eliminarLibro");
+        return result != null ? result.toString() : "eliminado";
     }
 
     // ─── Reportes (GraphQL) ───────────────────────────────────────────────────
