@@ -116,4 +116,12 @@ public class BibliotecaController {
     public ResponseEntity<?> getPrestamosDeUsuario(@PathVariable Long id) {
         return ResponseEntity.ok(service.getPrestamosDeUsuario(id));
     }
+
+    // ─── Password Reset ─────────────────────────────────────────────────────────
+    @PostMapping("/password-reset")
+    public ResponseEntity<?> requestPasswordReset(@RequestBody String body) {
+        return ResponseEntity.ok(service.requestPasswordReset(body));
+    }
+
+    
 }

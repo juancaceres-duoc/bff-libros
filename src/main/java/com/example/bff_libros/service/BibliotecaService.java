@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.example.bff_libros.client.LibrosClient;
+import com.example.bff_libros.client.PasswordResetClient;
 import com.example.bff_libros.client.PrestamoClient;
 import com.example.bff_libros.client.ReportesClient;
 import com.example.bff_libros.client.UsuarioClient;
@@ -18,13 +19,19 @@ public class BibliotecaService {
     private final PrestamoClient prestamoClient;
     private final LibrosClient librosClient;
     private final ReportesClient reportesClient;
+    private final PasswordResetClient passwordResetClient;
 
-    public BibliotecaService(UsuarioClient usuarioClient, PrestamoClient prestamoClient,
-                             LibrosClient librosClient, ReportesClient reportesClient) {
+    public BibliotecaService(UsuarioClient usuarioClient,
+                            PrestamoClient prestamoClient,
+                            LibrosClient librosClient,
+                            ReportesClient reportesClient,
+                            PasswordResetClient passwordResetClient) {
+
         this.usuarioClient = usuarioClient;
         this.prestamoClient = prestamoClient;
         this.librosClient = librosClient;
         this.reportesClient = reportesClient;
+        this.passwordResetClient = passwordResetClient;
     }
 
     // ─── Usuarios ─────────────────────────────────────────────────────────────
@@ -169,6 +176,19 @@ public class BibliotecaService {
         return extractList(response, "prestamosDeUsuario");
     }
 
+    private String extractEmail(String body) {
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper mapper =
+                    new com.fasterxml.jackson.databind.ObjectMapper();
+
+            Map<String, String> map = mapper.readValue(body, Map.class);
+            return map.get("email");
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error leyendo email del request");
+        }
+    }
+
     // ─── Helpers GraphQL ──────────────────────────────────────────────────────
 
     private Map<String, Object> buildQuery(String query) {
@@ -195,4 +215,12 @@ public class BibliotecaService {
         Map<String, Object> data = (Map<String, Object>) response.get("data");
         return (Map<String, Object>) data.get(key);
     }
+
+    public String requestPasswordReset(String body) {
+
+    Map<String, String> request = new HashMap<>();
+    request.put("email", extractEmail(body));
+
+    return passwordResetClient.requestPasswordReset(request);
+}
 }
